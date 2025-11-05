@@ -2,6 +2,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+/**
+ * @author Gilberto
+ * @since 04/11/2025
+ * @asignatura Servicios y Procesos
+ */
+
 //Definimos la clase principal que simulara la carrera
 public class CarreraPrioridades {
 
@@ -17,20 +24,20 @@ public class CarreraPrioridades {
 
         //Creamos los hilos (corredores) con sus prioridades
         //Creamos el primer hilo corredor1. Le pasamos la lista compartida para que sepa donde anotar su llegada
-        Thread corredor1 = new Thread(new Corredor("Corrdor 1 ", metaCompartida));
+        Thread corredor1 = new Thread(new Corredor("Corredor 1 ", metaCompartida));
         corredor1.setPriority(Thread.MIN_PRIORITY);
 
-        Thread corredor2 = new Thread(new Corredor("Corrdor 2 ", metaCompartida));
-        corredor1.setPriority(Thread.MAX_PRIORITY);
+        Thread corredor2 = new Thread(new Corredor("Corredor 2 ", metaCompartida));
+        corredor2.setPriority(Thread.NORM_PRIORITY);
 
-        Thread corredor3 = new Thread(new Corredor("Corrdor 3 ", metaCompartida));
-        corredor1.setPriority(Thread.NORM_PRIORITY);
+        Thread corredor3 = new Thread(new Corredor("Corredor 3 ", metaCompartida));
+        corredor3.setPriority(Thread.MAX_PRIORITY);
 
-        Thread corredor4 = new Thread(new Corredor("Corrdor 4 ", metaCompartida));
-        corredor1.setPriority(Thread.MIN_PRIORITY);
+        Thread corredor4 = new Thread(new Corredor("Corredor 4 ", metaCompartida));
+        corredor4.setPriority(Thread.NORM_PRIORITY);
 
-        Thread corredor5 = new Thread(new Corredor("Corrdor 5 ", metaCompartida));
-        corredor1.setPriority(Thread.MAX_PRIORITY);
+        Thread corredor5 = new Thread(new Corredor("Corredor 5 ", metaCompartida));
+        corredor5.setPriority(Thread.MIN_PRIORITY);
 
         //Iniciar la ejecucion de cada corredor
         corredor1.start();
@@ -40,7 +47,6 @@ public class CarreraPrioridades {
         corredor5.start();
 
         //Esperamos a que todos terminen
-
         try{
 
             corredor1.join();
@@ -54,10 +60,13 @@ public class CarreraPrioridades {
         }
 
         //Mostramos los resultados
-        System.out.println("\n Orden de llegada");
+        System.out.println("\nOrden de llegada");
 
         //Recorremos la lista compartida para imprimir
-        for
+        for(String corredor : metaCompartida){
+            System.out.println(corredor);
+
+        }
 
     }
 }
