@@ -2,6 +2,10 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+/**
+ * Gilberto
+ */
+
 public class ListNetworkInterfacesPartA {
 
     public static void main(String[] args) {
@@ -41,7 +45,7 @@ public class ListNetworkInterfacesPartA {
 
                 //Mostramos la informacion basica de la interfaz
 
-                System.out.println("Interfaz: " + name + " Display: " + displayName + " Activa: " + activa);
+                System.out.println("Interfaz: " + name + " Display: " + displayName + " Activa: " + (activa ? "SI" : "NO"));
 
             }
 
