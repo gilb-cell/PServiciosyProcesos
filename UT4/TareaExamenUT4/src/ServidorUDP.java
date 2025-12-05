@@ -1,61 +1,33 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 public class ServidorUDP {
 
-    private static final int puertoUDP = 12345;
+        public static void main(String[] args) {
 
-    // Mapa para almacenar respuestas por zona
-    private static final Map<String, List<String>> respuestas = Collections.synchronizedMap(new HashMap<>());
+            final int puertoUDP= 12345;
 
+            resultadosEncuesta resultados = new resultadosEncuesta();
 
-    public static void main(String[] args) {
+            try (DatagramSocket socket = new DatagramSocket(puertoUDP)) {
+                System.out.println("Servidor UDP escuchando en el puerto " + puertoUDP);
 
-        try (DatagramSocket socketUDP = new DatagramSocket(puertoUDP);) {
-            System.out.println("Iniciando servidor UDP en el puerto: " + puertoUDP);
+                while (true) {
+                    // Recibir datagrama
+                    byte[] buffer = new byte[1024];
+                    DatagramPacket paquete = new DatagramPacket(buffer, buffer.length);
+                    socket.receive(paquete);
 
-            //bucle infinito del servidor
-            while (true) {
-                byte[] buffer = new byte[1024];
-                DatagramPacket packetUDP = new DatagramPacket(buffer, buffer.length);
+                    // Crear un hilo para atenderlo
+                    new HiloDatagrama(paquete, socket, resultados).start();
+                }
 
-                System.out.println("Esperando datagrama del cliente");
-                socketUDP.receive(packetUDP);
-
-                String datagrama = new String(packetUDP.getData(), 0, packetUDP.getLength());
-                System.out.println("Mensaje recibido: " + datagrama);
-
-                //Creamos un hilo para procesar el datagrama
-                new Thread(() -> procesarMensaje(socketUDP, packetUDP, datagrama)).start();
+            } catch (Exception e) {
+                System.err.println("Error en servidor: " + e.getMessage());
             }
-
-
-        } catch (Exception e) {
         }
     }
 
-    //   MÉTODO DE PROCESAMIENTO QUE SE EJECUTA EN CADA HILO
-    private static void procesarMensaje(DatagramSocket socketUDP, DatagramPacket packet, String datagrama) {
 
-        String respuesta;
-        if (datagrama.startsWith("@resp#")) {
-            respuesta = procesarRespuesta(datagrama);
-        } else if (datagrama.startsWith("@fin#")) {
-            respuesta = procesarFinZona(datagrama);
-        } else if (datagrama.equals("@resultados@")) {
-            respuesta = generarResumenGlobal();
-        } else {
-            respuesta = "Error: el formato no es válido. Formatos válidos:\\n\" +\n" +
-                    "                        \"@resp#zona#respuesta@\\n\" +\n" +
-                    "                        \"@fin#zona@\\n\" +\n" +
-                    "                        \"@resultados@\";"
-        }
-
-        enviarRespuesta(socketUDP,packet, respuesta);
-
-    }
-}
 
