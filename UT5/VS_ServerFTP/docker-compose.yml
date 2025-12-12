@@ -1,0 +1,27 @@
+
+services:
+    ftp-server:
+        container_name: my-ftp-server
+        environment:
+            # Para uso LOCAL, usa la IP de loopback
+            # O comenta esta línea si solo vas a usar localhost
+            #- PUBLIC_IP=127.0.0.1
+            
+            
+            - FTP_USER=alumno
+            - FTP_PASS=1234
+        image: garethflowers/ftp-server
+        ports:
+            - "20-21:20-21/tcp"
+            - "40000-40009:40000-40009/tcp"
+        volumes:
+            # OPCIONES PARA WINDOWS:
+            
+            # Opción 1: Ruta absoluta de Windows (RECOMENDADA)
+            #- "C:/Users/TuUsuario/ftp-data:/home/alumno"
+            #- "C:/Users/anble/Desktop/Loren"
+            # Opción 2: Ruta relativa al docker-compose.yml
+            # - "./ftp-data:/home/alumno"
+            
+            # Opción 3: Carpeta en tu escritorio
+            - "C:/Users/AlumnoDAM2/Desktop/ftp-demo:/home/alumno"
